@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}
+    {% if quiz %}
+        Edit Quiz "{{ quiz.title }}"
+    {% else %}
+        Create a new Quiz
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    {% if form.non_field_errors %}
+        <ul class='form-errors'>
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            {% if quiz %}
+                <h1 class="h2">Edit Quiz "{{ quiz.title }}"</h1>
+            {% else %}
+                <h1 class="h2">Create New Quiz</h1>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form action="." method="post">
+                                {% for field in form %}
+                                    <div class=" form-group">
+                                        {#                                height: calc(1.0rem + 2px);#}
+                                        <label class="form-label" for="email">{{ field.label }}:</label>
+                                        {#                                        <div class="input-group input-group-merge">#}
+                                            {{ field|add_class:"form-control form-control-prepended" }}
+                                        {#                                        </div>#}
+                                    </div>
+                                    <div class="row">
+                                        {% if field.help_text %}
+                                            <p class="help" style="color: grey;"> {{ field.help_text|safe }}</p>
+                                            <i class="fa fa-info-circle" style="margin-top: 4px;"></i></i>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                {% csrf_token %}
+                                <input class="btn btn-primary" type="submit" value="Save course">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {# Testing #}
+
+    {#    <h1>#}
+    {#        {% if object %}#}
+    {#            Edit course "{{ object.title }}"#}
+    {#        {% else %}#}
+    {#            Create a new course#}
+    {#        {% endif %}#}
+    {#    </h1>#}
+    {#    <div class="module">#}
+    {#        <h2>Course info</h2>#}
+    {#        <form action="." method="post">#}
+    {#            {{ form.as_p }}#}
+    {#            {% csrf_token %}#}
+    {#            <p><input type="submit" value="Save course"></p>#}
+    {#        </form>#}
+    {#    </div>#}
+{% endblock %}

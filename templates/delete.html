@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Delete {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="mdk-drawer-layout__content page">
+
+        <div class="container-fluid page__container">
+            <h1>Delete "{{ object.title }}"</h1>
+
+            <div class="module">
+                <form action="." method="post">
+                    {% csrf_token %}
+                    <p>Are you sure you want to delete "{{ object }}"?</p>
+                    <input type="submit" class="button" value="Confirm">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

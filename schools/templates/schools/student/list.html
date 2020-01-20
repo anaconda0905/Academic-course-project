@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Students
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Students</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                {% if request.user.account_type != "admin" %}
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                            data-target="#exampleModalCenter">
+                                        Add Student
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                            data-target="#AddExcelFile">
+                                        Add Excel File
+                                    </button>
+                                {% endif %}
+                                <br>
+                                <br>
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0">
+                                    <thead>
+                                    <tr>
+
+                                        <th>Student</th>
+                                        <th style="width: 100px;">Username</th>
+                                        <th style="width: 100px;">Phone</th>
+                                        <th style="width: 80px;">Email</th>
+                                        {% if request.user.account_type == 'admin' %}
+                                            <th style="width: 80px;">School</th>
+                                        {% endif %}
+                                        {#                                        <th style="width: 24px;">Options</th>#}
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for student in students %}
+                                        <tr>
+                                            <td><a data-toggle="tooltip" title="Student Details"
+                                                   href="{% url "schools:students:detail" student.id %}"
+                                            ><span class="js-lists-values-employee-name">{{ student.user.get_full_name }}</span></a>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ student.user.username }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ student.user.phone }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ student.user.email }}</small>
+                                            </td>
+                                            {% if request.user.account_type == 'admin' %}
+                                            <td>
+                                                <small class="text-muted">{{ student.school }}</small>
+                                            </td>
+                                            {% endif %}
+                                            {#                                            <td><a data-toggle="tooltip" title="Student Details"#}
+                                            {#                                                   href="{% url "schools:students:detail" student.id %}"#}
+                                            {#                                            ><i class="fa fa-info-circle"></i></a></td>#}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <style>
+        [dir=ltr] .modal-backdrop {
+            position: unset !important;
+        }
+    </style>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% if form.non_field_errors %}
+                    <ul class='form-errors'>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="modal-body">
+                    <form action="." novalidate method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="form-label" for="username">Username:</label>
+                            {#                            <div class="input-group input-group-merge">#}
+                            {{ form.username|add_class:"form-control form-control-prepended" }}
+                            {#                                <input id="email" type="email" required="" class="form-control form-control-prepended" placeholder="Your email address">#}
+                            <div class="input-group-prepend">
+                            </div>
+                            {#                            </div>#}
+                        </div>
+                        {% if request.user.account_type == 'school' %}
+                            <div class="form-group">
+                                <label class="form-label" for="password">First Name</label>
+                                {#                                <div class="input-group input-group-merge">#}
+                                {{ form.first_name|add_class:"form-control form-control-prepended" }}
+                                <div class="input-group-prepend">
+                                </div>
+                                {#                                </div>#}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="password2">Last Name</label>
+                                {#                                <div class="input-group input-group-merge">#}
+                                {{ form.last_name|add_class:"form-control form-control-prepended" }}
+                                <div class="input-group-prepend">
+                                </div>
+                                {#                                </div>#}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="password2">Email</label>
+                                {#                                <div class="input-group input-group-merge">#}
+                                {{ form.email|add_class:"form-control form-control-prepended" }}
+                                <div class="input-group-prepend">
+                                </div>
+                                {#                                </div>#}
+                            </div>
+                        {% endif %}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <style>
+        [dir=ltr] .modal-backdrop {
+            position: unset !important;
+        }
+    </style>
+    <div class="modal fade" id="AddExcelFile" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Students</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% if form.non_field_errors %}
+                    <ul class='form-errors'>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="modal-body">
+                    <form action="{% url "schools:students:student_bulk_register" %}" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        Select Excel to upload:
+                        <input type="file" name="fileToUpload" id="fileToUpload">
+                        <p>Sheet Name Should be <strong>Students</strong>
+                            <br>
+                            Column <strong>A</strong> Should be <strong>No</strong>
+                            <br>
+                            Column <strong>B</strong> Should be <strong>UserName</strong>
+                            <br>
+                            Column <strong>C</strong> Should be <strong>First Name</strong>
+                            <br>
+                            Column <strong>D</strong> Should be <strong>Last Number</strong>
+                            <br>
+                            Column <strong>E</strong> Should be <strong>Email</strong>
+                            <br>
+                            Column <strong>F</strong> Should be <strong>Phone Number</strong>
+                            <br>
+                            <strong>Any column left empty, that row would be filled with Empty spaces.</strong>
+                        </p>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

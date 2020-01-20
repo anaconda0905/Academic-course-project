@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    {{ object.content }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Title: {{ object.content }}</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="table mb-0 col-md-12">
+
+                        <tbody>
+                        <tr>
+                            <th scope="row">Figure:</th>
+                            {% if object.figure %}
+                                <td><img style="width: 25em;" src="{{ object.figure.url }}"></td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="row">Content:</th>
+                            <td>{{ object.content }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Explanation:</th>
+                            <td>{{ object.explanation }}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

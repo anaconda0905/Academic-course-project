@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    {% if subject %}
+        {{ subject.title }} courses
+    {% else %}
+        All courses
+    {% endif %}
+{% endblock %}
+
+{#{% block Brand %}#}
+{#    {% if request.user.account_type == 'school' %}#}
+{#        <a href="#" class="navbar-brand">#}
+{#                            <img src="{% static "images/logo/white.svg" %}" class="mr-2" alt="AoneBrains" />#}
+{#            <span class="d-none d-xs-md-block">{{ request.user.school_profile.name }}</span>#}
+{#        </a>#}
+{#    {% endif %}#}
+{#{% endblock %}#}
+
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Courses</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                {#                                <a class="btn btn-sm btn-primary float-right" href="{% url "schools:teachers:courses:course_create" %}">Create new course</a>#}
+                                {#                                <br>#}
+                                {#                                                <br>#}
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0" style="width: 100%">
+                                    <thead>
+                                    <tr>
+
+                                        <th>Course</th>
+                                        <th style="width: 100px;">Subject</th>
+                                        <th style="width: 51px;">Class</th>
+                                        <th style="width: 100px;">Teacher</th>
+                                        <th style="width: 150px;">Created</th>
+                                        {% if request.user.account_type == 'admin' %}
+                                            <th style="width: 100px;">School</th>
+                                        {% endif %}
+                                        <th style="width: 100px;">Options</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for course in courses %}
+                                        <tr>
+                                            <td>
+                                                <a data-toggle="tooltip" title="Edit Course"
+                                                   href="{% url "school_courses:course_edit" course.id %}">
+                                                    <span class="js-lists-values-employee-name">{{ course.title }}</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ course.subject }}</small>
+                                            </td>
+                                            <td>{{ course.grade }}</td>
+                                            <td>{{ course.creator.user.get_full_name }}</td>
+                                            <td>{{ course.created }}</td>
+                                            {% if request.user.account_type == 'admin' %}
+                                                <td>{{ course.school }}</td>
+                                            {% endif %}
+                                            <td>
+                                                <a data-toggle="tooltip" title="Delete Course"
+                                                   href="{% url "school_courses:course_delete" course.slug %}"><i
+                                                        class="fa fa-trash"></i></a>
+                                                <a data-toggle="tooltip" title="Module List"
+                                                   style="width: 20px;"
+                                                   href="{% url "school_courses:module_list" course.slug %}"><img
+                                                        src="{% static "icons/Modules.svg" %}"></a></td>
+                                            {#                                                <td><a class="text-muted" href="{% url "schools:teachers:courses:course_delete" course.id%}" ><i class="material-icons">D</i></a></td>#}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

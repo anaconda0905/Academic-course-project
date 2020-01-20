@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    My courses
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">My Courses</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                <a class="btn btn-sm btn-primary float-right"
+                                   href="{% url "aonebrains_courses:course_create" %}">Create new
+                                    course</a>
+                                <br>
+                                <br>
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0" style="width: 100%">
+                                    <thead>
+                                    <tr>
+
+                                        <th>Course</th>
+                                        <th style="width: 100px;">Class</th>
+                                        <th style="width: 51px;">Subject</th>
+                                        <th style="width: 51px;">Draft</th>
+                                        <th style="width: 100px;">Options</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for course in object_list %}
+                                        <tr>
+                                            <td>
+                                                <a data-toggle="tooltip" title="Edit Course"
+                                                   href="{% url "aonebrains_courses:curator_course_edit" course.slug %}">
+                                                    <span class="js-lists-values-employee-name">{{ course.title }}</span></a>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ course.grade }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ course.subject }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ course.draft }}</small>
+                                            </td>
+                                            <td>
+                                                {#                                            <a data-toggle="tooltip" title="Edit Course"#}
+                                                {#                                                   href="{% url "aonebrains_courses:curator_course_edit" course.slug %}"><i#}
+                                                {#                                                    class="fa fa-edit"></i></a>#}
+                                                <a data-toggle="tooltip" title="Delete Course"
+                                                   href="{% url "aonebrains_courses:curator_course_delete" course.slug %}"><i
+                                                        class="fa fa-trash" style="margin-left: 3px"></i></a>
+                                                <a href="{% url "aonebrains_courses:curator_course_module_list" course.slug %}"><img
+                                                        data-toggle="tooltip" title="Modules List"
+                                                        src="{% static "icons/Modules.svg" %}" style="width: 20px"></a>
+                                                <a data-toggle="tooltip" title="Quiz List"
+                                                   href="{% url "aonebrains_quiz:quiz_list" course.slug %}"><img
+                                                        src="{% static "icons/Quiz.svg" %}" style="width: 20px"></a>
+                                            </td>
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

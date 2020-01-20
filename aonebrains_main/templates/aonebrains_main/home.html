@@ -1,0 +1,212 @@
+{% extends "aonebrains_main/base.html" %}
+{% load static %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+
+    <!-- Slider Area Start -->
+    <div id="rs-slider" class="slider-overlay-1">
+        <div id="home-slider">
+            <!-- Item 1 -->
+            <div class="item active">
+                <img src="{% static "main/images/slider/home2/slide1.jpg" %}" alt="Slide1"/>
+                <div class="slide-content">
+                    <div class="display-table">
+                        <div class="display-table-cell">
+                            <div class="container">
+                                <h1 class="slider-title" data-animation-in="fadeInLeft"
+                                    data-animation-out="animate-out">
+                                    WELCOME<br>AONEBRAIN</h1>
+                                <p data-animation-in="fadeInUp" data-animation-out="animate-out" class="slider-desc">
+                                    Here
+                                    we help out Students of different age groups and class to Learn something new.<br>
+                                    Nunc
+                                    Our teachers can help the student to discover his/her true potential.</p>
+                                <a href="{% url "accounts:student_sign_up" %}" class="sl-get-started-btn"
+                                   data-animation-in="lightSpeedIn"
+                                   data-animation-out="animate-out">GET STARTED NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="item">
+                <img src="{% static "main/images/slider/home2/slide2.jpg" %}" alt="Slide2"/>
+                <div class="slide-content">
+                    <div class="display-table">
+                        <div class="display-table-cell">
+                            <div class="container">
+                                <h1 class="slider-title" data-animation-in="fadeInUp" data-animation-out="animate-out">
+                                    ARE
+                                    YOU A SCHOOL?</h1>
+                                <p data-animation-in="fadeInUp" data-animation-out="animate-out" class="slider-desc">
+                                    With
+                                    the help of our website you can teach your students Online.<br> Your
+                                    teachers can create various amount of Courses for your Students.</p>
+                                <a href="{% url "schools:signup" %}" class="sl-get-started-btn"
+                                   data-animation-in="fadeInUp"
+                                   data-animation-out="animate-out">GET STARTED NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="item">
+                <img src="{% static "main/images/slider/home2/slide3.jpg" %}" alt="Slide3"/>
+                <div class="slide-content">
+                    <div class="display-table">
+                        <div class="display-table-cell">
+                            <div class="container">
+                                <h1 class="slider-title" data-animation-in="fadeInUp" data-animation-out="animate-out">
+                                    ARE
+                                    YOU READY TO APPLY?</h1>
+                                <p data-animation-in="fadeInUp" data-animation-out="animate-out" class="slider-desc">
+                                    Enter
+                                    into the world of fun where you learn and grow.<br> EACH
+                                    ONE TEACH ONE lets change the world together.</p>
+                                <a href="{% url "accounts:student_sign_up" %}" class="sl-get-started-btn"
+                                   data-animation-in="fadeInUp"
+                                   data-animation-out="animate-out">GET STARTED NOW</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Slider Area End -->
+
+    <!-- Courses Start -->
+    <div id="rs-courses-2" class="rs-courses-2 sec-spacer">
+        <div class="container">
+            <div class="sec-title mb-50">
+                <h2>OUR Latest COURSES</h2>
+                <div class="view-more">
+                    <a href="{% url "aonebrains_main:course_list" %}">View All Courses<i
+                            class="fa fa-angle-double-right"></i></a>
+                </div>
+            </div>
+            <div class="row">
+                {% for course in courses %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="cource-item">
+                            <div class="cource-img">
+                                {% if course.preview %}
+                                    <a href="#"><img style="height: 15em" src="{{ course.preview.url }}" alt=""/></a>
+                                {% endif %}
+                                {#                            <a class="image-link" href="courses-details.html" title="University Tour 2018">#}
+                                {#                                <i class="fa fa-link"></i>#}
+                                {#                            </a>#}
+                            </div>
+                            <div class="course-body">
+                                <a href="#" class="course-category">{{ course.subject }}</a>
+                                <h4 class="course-title"><a
+                                        href="{% url "aonebrains_main:course_detail" course.slug %}">{{ course.title }}</a>
+                                </h4>
+                                <div class="course-desc">
+                                    <p>
+                                        {{ course.overview|truncatechars:"40" }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses End -->
+
+    <!-- Counter Up Section Start-->
+    <div class="rs-counter pt-100 pb-70 bg3">
+        <div class="container">
+            <div class="sec-title white-text mb-50 text-center">
+                <h2>ACHEIVEMENTS</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="rs-counter-list">
+                        <h2 class="counter-number plus">{{ total_curators }}</h2>
+                        <h4 class="counter-desc">TEACHERS</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="rs-counter-list">
+                        <h2 class="counter-number plus">{{ total_courses }}</h2>
+                        <h4 class="counter-desc">COURSES</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="rs-counter-list">
+                        <h2 class="counter-number plus">{{ total_students }}</h2>
+                        <h4 class="counter-desc">STUDENTS</h4>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="rs-counter-list">
+                        <h2 class="counter-number plus">{{ total_schools }}</h2>
+                        <h4 class="counter-desc">Schools</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Counter Up Section End -->
+
+    <!-- Why Choose Us Start-->
+    <div class="rs-why-choose sec-spacer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="sec-title mb-40">
+                        <h2>WHY CHOOSE US ?</h2>
+                        <p>We help out students to know their True potential.</p>
+                    </div>
+                    <div class="choose-desc">
+                        <p>
+                            BLA BLA BLA BLA BLA BLA BLA
+                        </p>
+                        <p>
+                            It's time to put on makeup. It's time to dress up right. It's time to raise the curtain on
+                            the
+                            Muppet Show tonight.
+                        </p>
+                    </div>
+                    <div class="row choose-list mt-50">
+                        <div class="col-md-4">
+                            <div class="choose-item rs-animation-hover">
+                                <i class="flaticon-book-1 rs-animation-scale-up"></i>
+                                <h3 class="choose-title">Experienced Faculty</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="choose-item rs-animation-hover">
+                                <i class="flaticon-tool-1 rs-animation-scale-up"></i>
+                                <h3 class="choose-title">Popular Courses</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="choose-img">
+                        <img src="{% static "main/images/choose-us/1.png" %}" alt="Why Choose Us">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Why Choose Us End -->
+
+
+
+
+{% endblock %}

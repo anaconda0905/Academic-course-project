@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">{{ student.user.get_full_name }}</h1>
+
+    <div class="card">
+{#        <div class="dropdown float-right">#}
+{#      <a href="#" class="dropdown-toggle" data-caret="false" data-toggle="dropdown">#}
+{#        <i class="material-icons">more_horiz</i>#}
+{#      </a>#}
+{#      <div class="dropdown-menu dropdown-menu-right">#}
+{#        <a class="dropdown-item" href="#">Action</a>#}
+{#      </div>#}
+{#    </div>#}
+        <div class="card-body">
+      <table class="table mb-0 col-md-12">
+
+                        <tbody>
+                            <input type="hidden" id="user_type" name="user_type" value="0">
+                            <input type="hidden" id="seller_id" name="seller_id" value="41">
+                                <tr>
+                                    <th scope="row">Username</th>
+                                    <td>{{ student.user.username }}</td>
+{#                                    <td><input type="text" class="form-control fill valid" id="input_name" name="input_name" placeholder="Full Name" value="Fadli" aria-invalid="false"></td>#}
+                                </tr>
+                            <tr>
+                                    <th scope="row">Name</th>
+                                    <td>{{ student.user.get_full_name }}</td>
+{#                                    <td><input type="text" class="form-control" id="input_company_name" name="input_company_name" placeholder="Company Name" value="ClickDots"></td>#}
+                                </tr>
+                            <tr>
+                                    <th scope="row">Address</th>
+                                    <td>{{ student.user.address }}</td>
+{#                                    <td><input type="text" class="form-control" id="input_mp_id" name="input_mp_id" placeholder="MP ID#" value="MP291000"></td>#}
+                                </tr>
+                            <tr>
+                                    <th scope="row">Phone</th>
+                                    <td>{{ student.user.phone }}</td>
+{#                                    <td><input type="text" class="form-control" id="input_roc_number" name="input_roc_number" placeholder="Registration No#" value="111"></td>#}
+                                </tr>
+                            <tr>
+                                    <th scope="row">Mobile</th>
+                                    <td>{{ student.user.mobile }}</td>
+{#                                    <td><input type="text" class="form-control" id="input_mobile_number" name="input_mobile_number" placeholder="Mobile" value="0312364641"></td>#}
+                                </tr>
+                            <tr>
+                                <th scope="row">Image</th>
+                                {% if student.user.avatar %}
+                                    <td><img style="width: 100px;height: 120px" src="{{ student.user.avatar.url }}"></td>
+                                {% endif %}
+            {#                                    <td><input type="text" class="form-control fill valid" id="input_name" name="input_name" placeholder="Full Name" value="Fadli" aria-invalid="false"></td>#}
+                            </tr>
+                            {#                                <tr>#}
+                            {#                                    <th scope="row">Date of Birth</th>#}
+                            {#                                    <td><input type="text" class="form-control fill valid" data-field="date" data-format="dd-MMM-yyyy" id="input_dob" name="input_dob" placeholder="Date of Birth" value="10 Oct, 1994" aria-invalid="false"></td>#}
+                            {#                                </tr>#}
+
+                        </tbody>
+      </table>
+  </div>
+    </div>
+                    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load widget_tweaks static %}
+
+{% block title %}
+    Subjects
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Subjects</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                        data-target="#exampleModalCenter">
+                                    Add Subject
+                                </button>
+                                <br>
+                                <br>
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0">
+                                    <thead>
+                                    <tr>
+
+                                        <th>Subject</th>
+                                        {#                                        <th style="width: 100px;">Courses</th>#}
+                                        {#                                        <th style="width: 100px;">Options</th>#}
+                                        {#                                        <th style="width: 100px;">Phone</th>#}
+                                        {#                                        <th style="width: 80px;">Email</th>#}
+                                        {#                                        <th style="width: 100px;">Joined</th>#}
+                                        {#                                        <th style="width: 100px;">Last Login</th>#}
+                                        {#                                        <th style="width: 18px;">Options</th>#}
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for subject in subjects %}
+                                        <tr>
+                                            <td>
+                                                {#                                                {% if subject.courses.count > 0 %}#}
+                                                {#                                                    <a href="{% url 'aonebrains_courses:subject_course_list' subject.slug %}">#}
+                                                {#                                                {% endif %}#}
+                                                <span class="js-lists-values-employee-name">{{ subject.title }}</span>
+                                                {#                                                </a>#}
+                                            </td>
+                                            {#                                            <td>#}
+                                            {#                                                <small class="text-muted">#}
+                                            {#                                                    {% if subject.courses.count > 0 %}#}
+                                            {#                                                        <a href="{% url 'aonebrains_courses:subject_course_list' subject.slug %}">#}
+                                            {#                                                    {% endif %}#}
+                                            {#                                                    {{ subject.courses.count }}#}
+                                            {#                                                    </a>#}
+                                            {#                                                </small>#}
+                                            {#                                            </td>#}
+                                            {#                                            <td>#}
+                                            {#                                                <a href="{% url 'aonebrains_courses:subject_delete' subject.slug %}">#}
+                                            {#                                                    <i data-toggle="tooltip" title="Delete Subject"#}
+                                            {#                                                       class="fa fa-trash"></i>#}
+                                            {#                                                </a>#}
+                                            {##}
+                                            {#                                                <a href="{% url 'aonebrains_courses:subject_edit' subject.slug %}">#}
+                                            {#                                                    <img style="width: 20px" data-toggle="tooltip" title="Edit Subject"#}
+                                            {#                                                         src="{% static  "icons/Student_icon.svg" %}">#}
+                                            {#                                                </a>#}
+                                            {#                                            </td>#}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <style>
+        [dir=ltr] .modal-backdrop {
+            position: unset !important;
+        }
+    </style>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Subject</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% if form.non_field_errors %}
+                    <ul class='form-errors'>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="modal-body">
+                    <form action="." novalidate method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label class="form-label" for="username">{{ field.label }}:</label>
+                                <div class="input-group input-group-merge">
+                                    {{ field|add_class:"form-control form-control-prepended" }}
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            {#                                            <span class="far fa-envelope"></span>#}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {##}
+    {#    <form action="." method="post">#}
+    {#    {{ form.as_p }}#}
+    {#    {% csrf_token %}#}
+    {#    <input type="submit" value="Submit">#}
+    {#    </form>#}
+
+{% endblock %}
+
+

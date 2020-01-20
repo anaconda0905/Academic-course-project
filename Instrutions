@@ -1,0 +1,32 @@
+1: Change Settings.py before going live
+2: Evert thing working
+3: Change database with your credentials
+4: Run Command in virtual env
+> pip install -r requirements.txt
+
+5: Run Followings commands:
+> py manage.py makemigrations
+> py manage.py migrate
+> py manage.py createsuperuser # To create Admin user
+
+6: Navigate to
+ ####aDmInPanel_URL-Should_AlwaYs_HardER_toGetTO__ThatPage/admin/####
+
+> ip:port/aDmInPanel_URL-Should_AlwaYs_HardER_toGetTO__ThatPage/admin/ # to Access Admin Page
+
+7: Set User account_type to Admin  # Else you wouldn't be able to access other pages
+
+Note:
+    To enable feature of adding students with Excel File install Redis on your Device
+    set Its port number in Settings.py
+
+    CELERY_BROKER_URL = 'redis://redisIP:PORT'
+    CELERY_RESULT_BACKEND = 'redis://redisIP:PORT'
+
+    # For localhost
+    CELERY_BROKER_URL = 'redis://localhost:6379'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+8: Run celery workers Command
+> celery -A AoneBrains worker -l info
+

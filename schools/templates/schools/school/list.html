@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load widget_tweaks static %}
+
+{% block title %}
+    Schools
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Schools</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                {% if request.user.account_type == 'marketer' %}
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                            data-target="#exampleModalCenter">
+                                        Add School
+                                    </button>
+                                {% endif %}
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0" style="width: 100%">
+                                    <thead>
+                                    <tr>
+
+                                        <th>School</th>
+                                        <th style="width: 51px;">Username</th>
+                                        <th style="width: 51px;">Email</th>
+                                        <th style="width: 51px;">Phone</th>
+                                        <th style="width: 100px;">Joined</th>
+                                        <th style="width: 40px;">Options</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for school in schools %}
+                                        <tr>
+                                            <td>
+                                                <a href="{% url "schools:school_detail" school.slug %}"
+                                                   data-toggle="tooltip" title="School Detail"
+                                                ><span class="js-lists-values-employee-name">{{ school.name }}</span></a>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ school.user.username }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ school.user.email }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ school.user.phone }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ school.user.date_joined }}</small>
+                                            </td>
+
+                                            <td>
+                                                {#                                                <a href="{% url "schools:school_detail" school.slug %}"#}
+                                                {#                                            ><img data-toggle="tooltip" title="School Detail"#}
+                                                {#                                                  style="width: 20px" src="{% static "icons/Student_icon.svg" %}"></a>#}
+                                                <a href="{% url "schools:school_student_list" school.slug %}"
+                                                ><img data-toggle="tooltip" title="Students List"
+                                                      style="width: 20px"
+                                                      src="{% static "icons/Student_icon.svg" %}"></a>
+                                                <a href="{% url "schools:school_teacher_list" school.slug %}"
+                                                ><img data-toggle="tooltip" title="Teachers List"
+                                                      style="width: 20px"
+                                                      src="{% static "icons/Teacher_icon.svg" %}"></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <style>
+        [dir=ltr] .modal-backdrop {
+            position: unset !important;
+        }
+    </style>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if form.non_field_errors %}
+                        <ul class='form-errors'>
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <form action="." novalidate method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label class="form-label" for="username">{{ field.label }}:</label>
+                                <div class="input-group input-group-merge">
+                                    {{ field|add_class:"form-control form-control-prepended" }}
+                                    {#                                <input id="email" type="email" required="" class="form-control form-control-prepended" placeholder="Your email address">#}
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {#                        <div class="form-group">#}
+                        {#                            <label class="form-label" for="password">Email:</label>#}
+                        {#                            <div class="input-group input-group-merge">#}
+                        {#                                {{ form.email|add_class:"form-control form-control-prepended" }}#}
+                        {#                                <div class="input-group-prepend">#}
+                        {#                                    <div class="input-group-text">#}
+                        {#                                        <span class="fa fa-key"></span>#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

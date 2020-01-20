@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load course %}
+
+{% block title %}
+        Course
+{% endblock %}
+
+
+{% block content %}
+    <div class="mdk-drawer-layout__content page ">
+
+                    <div class="container-fluid page__container">
+
+                        <h1 class="h2">{{course.title}}</h1>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                <div class="table-responsive border-bottom" data-toggle="lists" data-lists-values='["js-lists-values-employee-name"]'>
+                                {% if request.user.account_type == 'teacher'%}
+                                    <a class="btn btn-sm btn-primary float-right" href="{% url "schools:teachers:courses:course_module_create" course.id%}">Create new Module</a>
+                                <br>
+                                    <br>
+                                {% endif %}
+
+                                    <div class="search-form search-form--light mb-3">
+                                        <input type="text" class="form-control search" placeholder="Search">
+                                        <button class="btn" type="button" role="button"><i class="material-icons">search</i></button>
+                                    </div>
+
+                                    <table class="table mb-0" style="width: 100%">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Module Title</th>
+                                                <th style="width: 100px;">Teacher</th>
+                                                <th style="width: 100px;">Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="list" id="search">
+                                        {% for m in module.all %}
+                                                       <tr>
+                                                <td>
+                                                    <span class="js-lists-values-employee-name">{{ m.title }}</span>
+                                                </td>
+                                                <td><small class="text-muted">{{ course.creator }}</small></td>
+                                                           {% if request.user.account_type == 'teacher' %}
+                                                <td><a href="{% url "schools:teachers:courses:course_module_update" m.course.id m.id%}"><i class="material-icons">E</i></a>
+{#                                                <a class="text-muted" href="{% url "schools:teachers:courses:course_delete" m.course.id%}" ><i class="material-icons">D</i></a>#}
+                                                <a class="text-muted" href="{% url "schools:teachers:courses:module_content_list" m.id %}" ><i class="material-icons">L</i></a></td>
+                                                       {% else %}
+                                                <td><a class="text-muted" href="{% url "schools:courses:module_content_list" m.id %}" ><i class="material-icons">L</i></a></td>
+                                                       {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </div>
+
+{% endblock %}
+
+
+
+
+{#{% block domready %}#}
+{#$('#modules').sortable({#}
+{#stop: function(event, ui) {#}
+{#modules_order = {};#}
+{#$('#modules').children().each(function(){#}
+{#// update the order field#}
+{#$(this).find('.order').text($(this).index() + 1);#}
+{#// associate the module's id with its order#}
+{#modules_order[$(this).data('id')] = $(this).index();#}
+{#});#}
+{#$.ajax({#}
+{#type: 'POST',#}
+{#url: '{% url "module_order" %}',#}
+{#contentType: 'application/json; charset=utf-8',#}
+{#dataType: 'json',#}
+{#data: JSON.stringify(modules_order)#}
+{#});#}
+{#}#}
+{#});#}
+{#$('#module-contents').sortable({#}
+{#stop: function(event, ui) {#}
+{#contents_order = {};#}
+{#$('#module-contents').children().each(function(){#}
+{#// associate the module's id with its order#}
+{#contents_order[$(this).data('id')] = $(this).index();#}
+{#});#}
+{#$.ajax({#}
+{#type: 'POST',#}
+{#url: '{% url "content_order" %}',#}
+{#contentType: 'application/json; charset=utf-8',#}
+{#dataType: 'json',#}
+{#data: JSON.stringify(contents_order),#}
+{#});#}
+{#}#}
+{#    });#}
+{#{% endblock %}#}

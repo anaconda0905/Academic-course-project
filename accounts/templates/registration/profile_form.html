@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}
+    {{ request.user.first_name }} profile
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container p-0">
+            <div class="row m-0">
+                <div class="col-lg container-fluid page__container">
+
+                    <h1 class="h2">Basic Information</h1>
+                    {% if form.non_field_errors %}
+                        <ul class='form-errors'>
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <form action="." method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card">
+                            <div class="list-group list-group-fit">
+                                {% for field in form %}
+                                    <div class="list-group-item">
+                                        <div class="form-group m-0" role="group" aria-labelledby="label-firstname">
+                                            <div class="form-row">
+                                                <label id="label-firstname" for="username"
+                                                       class="col-md-3 col-form-label form-label">{{ field.label }}</label>
+                                                <div class="col-md-9">
+                                                    {% if field.name == 'avatar' %}
+                                                        {% if form.instance.avatar %}
+                                                            <img style="height: 10em; width: 18em;"
+                                                                 src="{{ form.instance.avatar.url }}" alt="Preview"
+                                                                 class="rounded">
+                                                            <input type="file" name="avatar"
+                                                                   accept="image/*" id="id_avatar">
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {{ field|add_class:"form-control" }}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+{# Testing #}
+
+
+{##}
+{#<form action="." method="post" enctype="multipart/form-data">#}
+{#    {{ profile_form.name }}#}
+{#    {{ form.as_p }}#}
+{#    {% csrf_token %}#}
+{#    <input type="submit" value="Submit">#}
+{#</form>#}

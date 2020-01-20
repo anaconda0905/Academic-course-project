@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load course %}
+
+{% block title %}
+    Course
+{% endblock %}
+
+
+{% block content %}
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">{{ module.title }}</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                {% if request.user.account_type == 'teacher' %}
+                                    <a class="btn btn-sm btn-primary float-right"
+                                       href="{% url "school_courses:module_content_create" module.id "stext" %}">Text</a>
+                                    &nbsp;&nbsp;<a class="btn btn-sm btn-primary float-right"
+                                                   href="{% url "school_courses:module_content_create" module.id "sfile" %}">File</a>
+                                    &nbsp;&nbsp;<a class="btn btn-sm btn-primary float-right"
+                                                   href="{% url "school_courses:module_content_create" module.id "svideo" %}">Video</a>
+                                    &nbsp;&nbsp;<a class="btn btn-sm btn-primary float-right"
+                                                   href="{% url "school_courses:module_content_create" module.id "simage" %}">Image</a>
+                                    <br>
+                                    <br>
+                                {% endif %}
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i
+                                            class="material-icons">search</i></button>
+                                </div>
+
+                                <table class="table mb-0" style="width: 100%">
+                                    <thead>
+                                    <tr>
+
+                                        <th>Content Title</th>
+                                        <th style="width: 100px;">Type</th>
+                                        <th style="width: 100px;">Options</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for content in module.contents.all %}
+                                        {% with item=content.item %}
+                                            {% if  item|model_name and item.id %}
+                                                <tr>
+                                                <td>
+                                                    <span class="js-lists-values-employee-name">{{ item }}</span>
+                                                </td>
+                                                <td>
+                                                {% if request.user.account_type == 'teacher' %}
+                                                    <a href="{% url "school_courses:module_content_update" module.slug item|model_name item.id %}"
+                                                       data-toggle="tooltip" title="Update Content"><i
+                                                            class="fa fa-refresh" aria-hidden="true"></i></a>
+                                                    {% endif %}
+                                                <form action="{% url "school_courses:module_content_delete" content.id %}"
+                                                      method="post">
+                                                    <button type="submit"
+                                                            data-toggle="tooltip" title="Delete Content">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    {% csrf_token %}
+                                                </form>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </tr>
+                                    {% empty %}
+                                        <p>This module has no contents yet.</p>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

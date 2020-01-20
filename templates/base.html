@@ -1,0 +1,445 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load quiz_tags %}
+{#{% load django_bootstrap_breadcrumbs %}#}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- jQuery -->
+    <script src="{% static "vendor/jquery.min.js" %}"></script>
+
+
+    <!-- Perfect Scrollbar -->
+    <link type="text/css" href="{% static "vendor/perfect-scrollbar.css" %}" rel="stylesheet">
+
+    <!-- Material Design Icons -->
+    <link type="text/css" href="{% static "css/material-icons.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "css/material-icons.rtl.css" %}" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link type="text/css" href="{% static "css/fontawesome.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "css/fontawesome.rtl.css" %}" rel="stylesheet">
+
+    <!-- App CSS -->
+    <link type="text/css" href="{% static "css/app.css" %}" rel="stylesheet">
+    <link type="text/css" href="{% static "css/app.rtl.css" %}" rel="stylesheet">
+
+    <meta charset="UTF-8"/>
+    <title>{% block title %}AoneBrains{% endblock %}</title>
+</head>
+
+
+<body class=" layout-fluid">
+
+
+<div class="preloader">
+    <div class="sk-double-bounce">
+        <div class="sk-child sk-double-bounce1"></div>
+        <div class="sk-child sk-double-bounce2"></div>
+    </div>
+</div>
+
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    <!-- Header -->
+    <div id="header" data-fixed class="mdk-header js-mdk-header mb-0">
+        <div class="mdk-header__content">
+
+            <!-- Navbar -->
+            <nav id="default-navbar" class="navbar navbar-expand navbar-dark bg-primary m-0">
+                <div class="container-fluid">
+                    <!-- Toggle sidebar -->
+                    <button class="navbar-toggler d-block" data-toggle="sidebar" type="button">
+                        <span class="material-icons">menu</span>
+                    </button>
+
+                    <!-- Brand -->
+                    {% if request.user.account_type != "school" or request.user.account_type != "teacher" or request.user.account_type != "student" %}
+                        <a href="{% url "dashboard" %}" class="navbar-brand">
+                            {#                            <img src="{% static "images/logo/white.svg" %}" class="mr-2" alt="AoneBrains" />#}
+                            <span class="d-none d-xs-md-block">AoneBrains</span>
+                        </a>
+                    {% endif %}
+                    {% block Brand %}
+
+                    {% endblock %}
+
+
+                    <div class="flex"></div>
+                    {% if not request.user.is_anonymous %}
+                        <!-- Menu -->
+                        <ul class="nav navbar-nav flex-nowrap">
+
+                            <li class="nav-item dropdown ml-1 ml-md-3">
+
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+                                   role="button">
+                                    {% if request.user.avatar %}
+                                        <img
+                                                src="{{ request.user.avatar.url }}" alt="Avatar" class="rounded-circle"
+                                                width="40" height="35">
+                                    {% endif %}
+                                </a>
+
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item"
+                                            {% if request.user.account_type == 'school' or request.user.account_type == 'teacher' %}
+                                       href="{% url "schools:profile" %}"
+                                            {% elif request.user.account_type == 'super admin' or request.user.account_type == 'curator' or request.user.account_type == 'editor' or request.user.account_type == 'admin' or request.user.account_type == 'marketer' %}
+                                       href="{% url "accounts:profile" %}"
+                                            {% endif %}>
+                                        <i class="material-icons">person</i> My Profile
+                                    </a>
+                                    <a class="dropdown-item" href="{% url 'accounts:password_change' %}">
+                                        <i class="material-icons">undo</i> Change Password
+                                    </a>
+                                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                                        <i class="material-icons">lock</i> Logout
+                                    </a>
+
+                                </div>
+                            </li>
+                            <!-- // END User dropdown -->
+
+                        </ul>
+                        <!-- // END Menu -->
+                    {% endif %}
+                </div>
+            </nav>
+            <!-- // END Navbar -->
+
+        </div>
+    </div>
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
+
+        <div data-push data-responsive-width="992px" class="mdk-drawer-layout js-mdk-drawer-layout">
+
+            {% block content %}
+            {% endblock %}
+
+            {#side menu starts here#}
+            {% if not request.user.is_anonymous %}
+                <div class="mdk-drawer js-mdk-drawer" id="default-drawer">
+                    <div class="mdk-drawer__content ">
+                        <div class="sidebar sidebar-left sidebar-dark bg-dark o-hidden" data-perfect-scrollbar>
+                            <div class="sidebar-p-y">
+                                {% if request.user.account_type == 'admin' %}
+                                    <ul class="sidebar-menu sm-active-button-bg">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "accounts:admin_dashboard" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "aonebrains_courses:class_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Classes
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "accounts:curator_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Curators
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "accounts:editor_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Editors
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "accounts:marketer_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Markters
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "aonebrains_courses:subject_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Subjects
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "accounts:course_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Courses
+                                            </a>
+                                        </li>
+                                       
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "accounts:students_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Students
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "schools:schools_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Schools
+                                            </a>
+                                        </li>
+                                        {#                                    <li class="sidebar-menu-item">#}
+                                        {#                                        <a class="sidebar-menu-button"#}
+                                        {#                                           href="{% url "schools:courses:course_list" %}">#}
+                                        {#                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>#}
+                                        {#                                            School Courses#}
+                                        {#                                        </a>#}
+                                        {#                                    </li>#}
+                                        {#                                    <li class="sidebar-menu-item">#}
+                                        {#                                        <a class="sidebar-menu-button"#}
+                                        {#                                           href="{% url "schools:students:list" %}">#}
+                                        {#                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>#}
+                                        {#                                            School Students#}
+                                        {#                                        </a>#}
+                                        {#                                    </li>#}
+                                    </ul>
+                                {% elif request.user.account_type == 'super admin' %}
+                                    <ul class="sidebar-menu sm-active-button-bg">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:super_admin_dashboard" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:curator_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Curators
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:editor_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Editors
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:superAdmin_marketers_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Markters
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "aonebrains_courses:course_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Courses
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% elif request.user.account_type == 'editor' %}
+                                    <ul class="sidebar-menu sm-active-button-bg">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "accounts:editor_dashboard" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:curator_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Curators
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "aonebrains_courses:course_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Courses
+                                            </a>
+                                        </li>
+                                        {#                                    <li class="sidebar-menu-item">#}
+                                        {#                                        <a class="sidebar-menu-button" href="{% url "accounts:super_admin:courses:course_list" %}">#}
+                                        {#                                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>#}
+                                        {#                                            Courses#}
+                                        {#                                        </a>#}
+                                        {#                                    </li>#}
+                                    </ul>
+
+                                {% elif request.user.account_type == 'school' %}
+                                    <ul class="sidebar-menu sm-active-button-bg">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "schools:dashboard" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "schools:teachers:list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Instructors
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{% url "schools:students:list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Students
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "school_courses:subject_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Subjects
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "schools:courses:course_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Courses
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% elif request.user.account_type == 'teacher' %}
+                                    <ul class="sidebar-menu sm-active-button-bg">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "schools:teachers:dashboard" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "schools:teachers:students:list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Students
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "schools:teachers:courses:manage_course_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Courses
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% elif request.user.account_type == 'curator' %}
+                                    <ul class="sidebar-menu sm-active-button-bg">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:curator_dashboard" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "aonebrains_courses:curator_courses" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Courses
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% elif request.user.account_type == 'marketer' %}
+                                    <ul class="sidebar-menu sm-active-button-bg">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:marketer_dashboard" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="{% url "accounts:marketer_school_list" %}">
+                                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i>
+                                                Schools
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {#                side menu ends here#}
+            {% endif %}
+        </div>
+    </div>
+    <!-- // END Header -->
+
+</div>
+
+
+<!-- Bootstrap -->
+<script src="{% static "vendor/popper.min.js" %}"></script>
+<script src="{% static "vendor/bootstrap.min.js" %}"></script>
+
+<!-- Perfect Scrollbar -->
+<script src="{% static "vendor/perfect-scrollbar.min.js" %}"></script>
+
+<!-- MDK -->
+<script src="{% static "vendor/dom-factory.js" %}"></script>
+<script src="{% static "vendor/material-design-kit.js" %}"></script>
+
+<!-- App JS -->
+<script src="{% static "js/app.js" %}"></script>
+
+<!-- Highlight.js -->
+<script src="{% static "js/hljs.js" %}"></script>
+
+<!-- App Settings (safe to remove) -->
+<script src="{% static "js/app-settings.js" %}"></script>
+
+<!-- Global Settings -->
+<script src="{% static "js/settings.js" %}"></script>
+
+<!-- Moment.js -->
+<script src="{% static "vendor/moment.min.js" %}"></script>
+<script src="{% static "vendor/moment-range.min.js" %}"></script>
+
+<!-- Chart.js -->
+<script src="{% static "vendor/Chart.min.js" %}"></script>
+
+<!-- UI Charts Page JS -->
+<script src="{% static "js/chartjs-rounded-bar.js" %}"></script>
+<script src="{% static "js/chartjs.js" %}"></script>
+
+<!-- Chart.js Samples -->
+<script src="{% static "js/page.student-dashboard.js" %}"></script>
+
+<!-- List.js -->
+<script src="{% static 'vendor/list.min.js' %}"></script>
+<script src="{% static 'js/list.js' %}"></script>
+
+<!-- Tables -->
+<script src="{% static 'js/toggle-check-all.js' %}"></script>
+<script src="{% static 'js/check-selected-row.js' %}"></script>
+
+
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>#}
+{#<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>#}
+{#<script>#}
+{#    $(document).ready(function () {#}
+{#        {% block domready %}#}
+{#        {% endblock %}#}
+{#    });#}
+{#</script>#}
+
+
+</body>
+
+</html>

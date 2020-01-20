@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}
+    {% if object %}
+        Edit content "{{ object.title }}"
+    {% else %}
+        Add a new content
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% if form.non_field_errors %}
+        <ul class='form-errors'>
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="mdk-drawer-layout__content page ">
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">{% if object %}
+                Edit content "{{ object.title }}"
+            {% else %}
+                Add a new content
+            {% endif %}</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="container">
+                            <form action="." method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        <label class="form-label" for="email">{{ field.label }}:</label>
+
+                                        {{ field|add_class:"form-control form-control-prepended " }}
+
+                                    </div>
+                                {% endfor %}
+                                <button class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

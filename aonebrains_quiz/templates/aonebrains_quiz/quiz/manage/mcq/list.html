@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Quiz
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Questions</h1>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                <a class="btn btn-sm btn-primary float-right"
+                                   href="{% url "aonebrains_quiz:mcq_create" course_slug quiz_slug %}">Create
+                                    new Question</a>
+                                <br>
+                                <br>
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0" style="width: 100%">
+                                    <thead>
+                                    <tr>
+                                        <th>Question</th>
+                                        <th style="width: 130px;">Explanation</th>
+                                        {#                                                <th style="width: 51px;">Courses</th>#}
+                                        <th style="width: 100px;">Options</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for mcq in mcqs %}
+                                        <tr>
+                                            <td>
+                                                <a href="{% url "aonebrains_quiz:mcq_detail" mcq.id %}">
+                                                    <span class="js-lists-values-employee-name">{{ mcq.content }}</span></a>
+
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ mcq.explanation|truncatechars:60 }}</small>
+                                            </td>
+                                            {#                                                <td>Courses</td>#}
+                                            <td><a data-toggle="tooltip" title="Mcq Edit"
+                                                   href="{% url "aonebrains_quiz:mcq_edit" course_slug quiz_slug mcq.id %}"><i
+                                                    class="fa fa-edit"></i></a>
+                                                {#                                                <a class="text-muted" href="{% url "schools:teachers:courses:course_delete" course.id%}" ><i class="material-icons">D</i></a>#}
+                                                {#                                                <a class="text-muted" href="{% url "schools:teachers:courses:module_list" course.id %}" ><i class="material-icons">L</i></a></td>#}
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

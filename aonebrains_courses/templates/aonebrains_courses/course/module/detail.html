@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Title: {{ openmodule.title }}</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="table mb-0 col-md-12">
+
+                        <tbody>
+                        <tr>
+                            <th scope="row">Title:</th>
+                            <td>{{ openmodule.title }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Overview:</th>
+                            <td>{{ openmodule.description }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Course:</th>
+                            <td>{{ openmodule.course }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Contents:</th>
+                            <td>{{ openmodule.contents.count }}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

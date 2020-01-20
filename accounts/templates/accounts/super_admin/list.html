@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load widget_tweaks static %}
+
+{% block title %}
+    Super Admin
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Super Admins</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                {% if request.user.account_type == 'admin' %}
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                            data-target="#exampleModalCenter">
+                                        Add Super Admin
+                                    </button>
+                                    <br>
+                                    <br>
+                                {% endif %}
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Super Admin</th>
+                                        <th style="width: 100px;">Username</th>
+                                        <th style="width: 100px;">Phone</th>
+                                        <th style="width: 80px;">Email</th>
+                                        <th style="width: 100px;">Joined</th>
+                                        <th style="width: 100px;">Last Login</th>
+                                        <th style="width: 100px;">Active</th>
+                                        <th style="width: 100px;">Options</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for super_admin in super_admins %}
+                                        <tr>
+                                            <td>
+                                                <a data-toggle="tooltip" title="Super Admin detail"
+                                                   href="{% url "accounts:super_admin_detail" super_admin.slug %}">
+                                                    <span class="js-lists-values-employee-name">{{ super_admin.user.get_full_name }}</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ super_admin.user.username }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ super_admin.user.phone }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ super_admin.user.email }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ super_admin.user.date_joined }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ super_admin.user.last_login }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ super_admin.user.is_active }}</small>
+                                            </td>
+                                            <td><a href="{% url "accounts:superAdmin_curators_list" super_admin.slug %}"
+                                            ><img data-toggle="tooltip" title="Curators List"
+                                                  style="width: 20px" src="{% static 'icons/Curator_icon.svg' %}"></a>
+                                                <a href="{% url "accounts:superAdmin_editors_list" super_admin.slug %}"
+                                                ><img data-toggle="tooltip" title="Editors List"
+                                                      style="width: 20px"
+                                                      src="{% static 'icons/Editor_icon.svg' %}"></a>
+                                                <a href="{% url "accounts:superAdmin_marketer_list" super_admin.slug %}"
+                                                ><img data-toggle="tooltip" title="Marketer List"
+                                                      style="width: 20px" src="{% static 'icons/Marketer.svg' %}"></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <style>
+        [dir=ltr] .modal-backdrop {
+            position: unset !important;
+        }
+    </style>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Super Admin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% if form.non_field_errors %}
+                    <ul class='form-errors'>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="modal-body">
+                    <form action="." novalidate method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label class="form-label" for="username">{{ field.label }}:</label>
+                                {#                                <div class="input-group input-group-merge">#}
+                                {{ field|add_class:"form-control form-control-prepended" }}
+                                <div class="input-group-prepend">
+
+                                </div>
+                                {#                                </div>#}
+                            </div>
+                        {% endfor %}
+                        {#                        <div class="form-group">#}
+                        {#                            <label class="form-label" for="username">Username:</label>#}
+                        {#                            <div class="input-group input-group-merge">#}
+                        {#                                {{ form.username|add_class:"form-control form-control-prepended" }}#}
+                        {#                                <div class="input-group-prepend">#}
+                        {#                                    <div class="input-group-text">#}
+                        {#                                        <span class="far fa-envelope"></span>#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {#                        <div class="form-group">#}
+                        {#                            <label class="form-label" for="password">First Name</label>#}
+                        {#                            <div class="input-group input-group-merge">#}
+                        {#                                {{ form.first_name|add_class:"form-control form-control-prepended" }}#}
+                        {#                                <div class="input-group-prepend">#}
+                        {#                                    <div class="input-group-text">#}
+                        {#                                        <span class="far fa-key"></span>#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {#                        <div class="form-group">#}
+                        {#                            <label class="form-label" for="password2">Last Name</label>#}
+                        {#                            <div class="input-group input-group-merge">#}
+                        {#                                {{ form.last_name|add_class:"form-control form-control-prepended" }}#}
+                        {#                                <div class="input-group-prepend">#}
+                        {#                                    <div class="input-group-text">#}
+                        {#                                        <span class="far fa-key"></span>#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        {#                        <div class="form-group">#}
+                        {#                            <label class="form-label" for="password2">Email</label>#}
+                        {#                            <div class="input-group input-group-merge">#}
+                        {#                                {{ form.email|add_class:"form-control form-control-prepended" }}#}
+                        {#                                <div class="input-group-prepend">#}
+                        {#                                    <div class="input-group-text">#}
+                        {#                                        <span class="far fa-key"></span>#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {##}
+    {#    <form action="." method="post">#}
+    {#    {{ form.as_p }}#}
+    {#    {% csrf_token %}#}
+    {#    <input type="submit" value="Submit">#}
+    {#    </form>#}
+
+{% endblock %}
+
+

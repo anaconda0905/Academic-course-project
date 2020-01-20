@@ -1,0 +1,153 @@
+{% extends "aonebrains_main/base.html" %}
+
+{% block title %}
+    Courses
+{% endblock %}
+
+{% block content %}
+
+    <!-- Breadcrumbs Start -->
+    <div class="rs-breadcrumbs bg7 breadcrumbs-overlay">
+        <div class="breadcrumbs-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        {% if school_label %}
+                            <h1 class="page-title">{{ school_label }}</h1>
+                        {% else %}
+                            <h1 class="page-title">OUR COURSES</h1>
+                        {% endif %}
+                        <ul>
+                            <li>
+                                <a class="active" href="{% url "aonebrains_main:Home" %}">Home</a>
+                            </li>
+                            {% if school_label %}
+                                <li>{{ school_label }}</li>
+                            {% else %}
+                                <li>Our Courses</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumbs End -->
+
+    <!-- Search Courses Start -->
+    {#    <div class="rs-search-courses" style="margin-top: -31px; margin-bottom: -53px;">#}
+    {#        <div class="container">#}
+    {#            <form class="row search-form">#}
+    {#                <div class="col-md-3">#}
+    {#                    <div class="categories">#}
+    {#                        <select>#}
+    {#                            <option>All Classes</option>#}
+    {#                            <option>Computer Engineering</option>#}
+    {#                            <option>Electrical Engineering</option>#}
+    {#                            <option>Electronics Engineering</option>#}
+    {#                            <option>Civil Engineering</option>#}
+    {#                        </select>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <div class="col-md-6">#}
+    {#                    <div class="keyword">#}
+    {#                        <input type="text" placeholder="Course Keyword...">#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#                <div class="col-md-3">#}
+    {#                    <div class="search-btn">#}
+    {#                        <button type="submit">Search Courses</button>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </form>#}
+    {#        </div>#}
+    {#    </div>#}
+    <!-- Search Courses End -->
+
+
+    <!-- Courses Start -->
+    <div id="rs-courses-3" class="rs-courses-3 sec-spacer">
+        <div class="container">
+            <div class="abt-title">
+
+                {% if school_label %}
+                    <h2>{{ school_label }}</h2>
+                {% else %}
+                    <h2>Our Courses</h2>
+                {% endif %}
+            </div>
+            <div class="gridFilter">
+                <button class="active" data-filter="*">ALL</button>
+                {% for subject in subjects %}
+                    {% if subject.courses.count != 0 %}
+                        <button data-filter=".filter{{ subject }}">{{ subject }}</button>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+            <div class="row grid">
+                {% for course in courses %}
+                    <div class="col-lg-4 col-md-6 grid-item filter{{ course.subject }}">
+                        <div class="course-item">
+                            <div class="course-img">
+                                {% if course.preview %}
+                                    <img style="height: 15em" src="{{ course.preview.url }}" alt=""/>
+                                {% endif %}
+                                <div class="course-toolbar">
+                                    <h4 class="course-category"><a href="#">{{ course.subject }}</a></h4>
+                                    <div class="course-date">
+                                        <i class="fa fa-calendar"></i> {{ course.year_month_created }}
+                                    </div>
+                                    <div class="course-duration">
+                                        <i class="fa"></i> {{ course.grade }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="course-body">
+                                <div class="course-desc">
+                                    <h3 class="course-title"><a
+                                            href="{% url "aonebrains_main:course_detail" course.slug %}">{{ course.title }}</a>
+                                    </h3>
+                                    <p>
+                                        {{ course.overview|truncatechars:"30" }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <nav aria-label="Page navigation example">
+                {% if course_pag.has_other_pages %}
+                    <ul class="pagination">
+                        {% if course_pag.has_previous %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?page={{ course_pag.previous_page_number }}">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
+                        {% for i in course_pag.paginator.page_range %}
+                            {% if course_pag.number == i %}
+                                <li class="page-item"><span class="page-link active">{{ i }}</span>
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if course_pag.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?page={{ course_pag.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+    <!-- Courses End -->
+{% endblock %}

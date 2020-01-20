@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+        <div class="container page__container">
+
+            <h1 class="h2">Dashboard</h1>
+            <div class="row">
+                <div class="col-lg-6">
+                    {#                    <div class="card">#}
+                    {#                        <div class="card-header d-flex align-items-center">#}
+                    {#                            <div class="flex">#}
+                    {#                                <h4 class="card-title">Courses</h4>#}
+                    {#                                <p class="card-subtitle">Last 7 Days</p>#}
+                    {#                            </div>#}
+                    {#                            <a href="fixed-instructor-earnings.html" class="btn btn-sm btn-primary"><i#}
+                    {#                                    class="material-icons">trending_up</i></a>#}
+                    {#                        </div>#}
+                    {#                        <div class="card-body">#}
+                    {#                            <div class="chart" style="height: 200px;">#}
+                    {#                                <canvas id="earningsChart" class="chart-canvas"></canvas>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <div class="flex">
+                                <h4 class="card-title"><a href="{% url "aonebrains_courses:course_list" %}">Courses</a>
+                                </h4>
+                                <p class="card-subtitle">Latest Courses</p>
+                            </div>
+                            {#                            <a href="fixed-instructor-statement.html" class="btn btn-sm btn-primary"><i#}
+                            {#                                    class="material-icons">receipt</i></a>#}
+                        </div>
+                        <div data-toggle="lists" data-lists-values='[
+            "js-lists-values-course",
+            "js-lists-values-grade",
+            "js-lists-values-date"
+          ]' data-lists-sort-by="js-lists-values-date" data-lists-sort-desc="true" class="table-responsive">
+                            <table class="table table-nowrap m-0">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th colspan="2">
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-course">Course</a>
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-grade">Grade</a>
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-date">Date</a>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody class="list">
+
+                                {% for course in courses|slice:"-5:" %}
+                                    <tr>
+                                        <td>
+                                            <div class="media align-items-center">
+                                                <a href="{% url "aonebrains_courses:curator_course_edit" course.slug %}"
+                                                   class="avatar avatar-4by3 avatar-sm mr-3">
+                                                    {% if course.preview %}
+                                                        <img src="{{ course.preview.url }}" alt="course"
+                                                             class="avatar-img rounded">
+                                                    {% endif %}
+                                                </a>
+                                                <div class="media-body">
+                                                    <strong><span
+                                                            class="js-lists-values-course">{{ course.title }}</span></strong><br>
+                                                    <small class="text-muted mr-1">
+                                                        class: <span
+                                                            class="js-lists-values-grade">{{ course.grade }}</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <small class="text-muted text-uppercase js-lists-values-date">{{ course.created }}
+                                            </small>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <div class="flex">
+                                <h4 class="card-title">Quizzes</h4>
+                                <p class="card-subtitle">Latest Quizzes</p>
+                            </div>
+                            {#                            <a href="fixed-instructor-statement.html" class="btn btn-sm btn-primary"><i#}
+                            {#                                    class="material-icons">receipt</i></a>#}
+                        </div>
+                        <div data-toggle="lists" data-lists-values='[
+            "js-lists-values-course",
+            "js-lists-values-quiz",
+{#            "js-lists-values-grade",#}
+{#            "js-lists-values-date"#}
+          ]' data-lists-sort-by="js-lists-values-date" data-lists-sort-desc="true" class="table-responsive">
+                            <table class="table table-nowrap m-0">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th colspan="2">
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-course">Course</a>
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-quiz">Quiz</a>
+                                        {#                                        <a href="javascript:void(0)" class="sort"#}
+                                        {#                                           data-sort="js-lists-values-grade">Grade</a>#}
+                                        {#                                        <a href="javascript:void(0)" class="sort"#}
+                                        {#                                           data-sort="js-lists-values-date">Date</a>#}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody class="list">
+
+                                {% for quiz in quizzes|slice:"-5:" %}
+                                    <tr>
+                                        <td>
+                                            <div class="media align-items-center">
+                                                {#                                                <a href="{% url "schools:teachers:courses:course_detail" quiz.id %}"#}
+                                                {#                                                   class="avatar avatar-4by3 avatar-sm mr-3">#}
+                                                {#                                                    {% if quiz.preview %}#}
+                                                {#                                                        <img src="{{ quiz.preview.url }}" alt="course"#}
+                                                {#                                                             class="avatar-img rounded">#}
+                                                {#                                                    {% endif %}#}
+                                                {#                                                </a>#}
+                                                <div class="media-body">
+                                                    <strong><a
+                                                            href="#"
+                                                            style="color: inherit;"><span
+                                                            class="js-lists-values-quiz">{{ quiz.title }}</span></a></strong><br>
+                                                    <small class="text-muted mr-1">
+                                                        {#                                                        Teacher:#}
+                                                        {#                                                        <a href="{% url "schools:teachers:detail" quiz.user.id %}"#}
+                                                        {#                                                           style="color: inherit;"></a>#}
+                                                        course: <span
+                                                            class="js-lists-values-course">{{ quiz.course.title }}</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        {#                                        <td class="text-right">#}
+                                        {#                                            <small class="text-muted text-uppercase js-lists-values-date">{{ quiz.user.date_joined }}#}
+                                        {#                                            </small>#}
+                                        {#                                        </td>#}
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {#                <div class="col-lg-6">#}
+                {#                    <div class="card">#}
+                {#                        <div class="card-header d-flex align-items-center">#}
+                {#                            <div class="flex">#}
+                {#                                <h4 class="card-title"><a href="#">Curators</a></h4>#}
+                {#                                <p class="card-subtitle">New Curators</p>#}
+                {#                            </div>#}
+                {#                            <a href="fixed-instructor-statement.html" class="btn btn-sm btn-primary"><i#}
+                {#                                    class="material-icons">receipt</i></a>#}
+                {#                        </div>#}
+                {#                        <div data-toggle="lists" data-lists-values='[#}
+                {#            "js-lists-values-course",#}
+                {#            "js-lists-values-name",#}
+                {#            "js-lists-values-grade",#}
+                {#            "js-lists-values-count"#}
+                {#          ]' data-lists-sort-by="js-lists-values-date" data-lists-sort-desc="true" class="table-responsive">#}
+                {#                            <table class="table table-nowrap m-0">#}
+                {#                                <thead class="thead-light">#}
+                {#                                <tr>#}
+                {#                                    <th colspan="2">#}
+                {#                                        <a href="javascript:void(0)" class="sort"#}
+                {#                                           data-sort="js-lists-values-course">Course</a>#}
+                {#                                        <a href="javascript:void(0)" class="sort" data-sort="js-lists-values-document">Teacher</a>#}
+                {#                                        <a href="javascript:void(0)" class="sort"#}
+                {#                                           data-sort="js-lists-values-name">Name</a>#}
+                {#                                        <a href="javascript:void(0)" class="sort"#}
+                {#                                           data-sort="js-lists-values-count">Course Count</a>#}
+                {#                                    </th>#}
+                {#                                </tr>#}
+                {#                                </thead>#}
+                {#                                <tbody class="list">#}
+                {##}
+                {#                                {% for curator in curators|slice:"-5:" %}#}
+                {#                                    <tr>#}
+                {#                                        <td>#}
+                {#                                            <div class="media align-items-center">#}
+                {#                                                <div class="media-body">#}
+                {#                                                    <strong><a#}
+                {#                                                            href="#"#}
+                {#                                                            style="color: inherit;"><span#}
+                {#                                                            class="js-lists-values-name">{{ curator.user.first_name }}</span></a></strong><br>#}
+                {#                                                    <small class="text-muted mr-1">#}
+                {#                                                        Admin:#}
+                {#                                                        <a href="#"#}
+                {#                                                           style="color: inherit;">{{ curator.admin }}</a>#}
+                {#                                                        Curators: <span#}
+                {#                                                            class="js-lists-values-count">{{ curator.courses.count }}</span>#}
+                {#                                                    </small>#}
+                {#                                                </div>#}
+                {#                                            </div>#}
+                {#                                        </td>#}
+                {#                                        <td class="text-right">#}
+                {#                                            <small class="text-muted text-uppercase js-lists-values-date">{{ curator.user.date_joined }}#}
+                {#                                            </small>#}
+                {#                                        </td>#}
+                {#                                    </tr>#}
+                {#                                {% endfor %}#}
+                {#                                </tbody>#}
+                {#                            </table>#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </div>#}
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <div class="flex">
+                                <h4 class="card-title"><a href="{% url "accounts:curator_list" %}">Curators</a></h4>
+                                <p class="card-subtitle">New Curators</p>
+                            </div>
+                            {#                            <a href="fixed-instructor-statement.html" class="btn btn-sm btn-primary"><i#}
+                            {#                                    class="material-icons">receipt</i></a>#}
+                        </div>
+                        <div data-toggle="lists" data-lists-values='[
+            "js-lists-values-curator",
+            "js-lists-values-admin",
+{#            "js-lists-values-grade",#}
+            "js-lists-values-date"
+          ]' data-lists-sort-by="js-lists-values-date" data-lists-sort-desc="true" class="table-responsive">
+                            <table class="table table-nowrap m-0">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th colspan="2">
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-curator">Curator</a>
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-admin">Admin</a>
+                                        {#                                        <a href="javascript:void(0)" class="sort"#}
+                                        {#                                           data-sort="js-lists-values-grade">Grade</a>#}
+                                        <a href="javascript:void(0)" class="sort"
+                                           data-sort="js-lists-values-date">Date</a>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody class="list">
+
+                                {% for curator in curators|slice:"-5:" %}
+                                    <tr>
+                                        <td>
+                                            <div class="media align-items-center">
+                                                {#                                                <a href="{% url "schools:teachers:courses:course_detail" curator.id %}"#}
+                                                {#                                                   class="avatar avatar-4by3 avatar-sm mr-3">#}
+                                                {#                                                    {% if curator.preview %}#}
+                                                {#                                                        <img src="{{ curator.preview.url }}" alt="course"#}
+                                                {#                                                             class="avatar-img rounded">#}
+                                                {#                                                    {% endif %}#}
+                                                {#                                                </a>#}
+                                                <div class="media-body">
+                                                    <strong><a
+                                                            href="#"
+                                                            style="color: inherit;"><span
+                                                            class="js-lists-values-curator">{{ curator.user.first_name }}</span></a></strong><br>
+                                                    <small class="text-muted mr-1">
+                                                        {#                                                        Teacher:#}
+                                                        {#                                                        <a href="{% url "schools:teachers:detail" curator.user.id %}"#}
+                                                        {#                                                           style="color: inherit;"></a>#}
+                                                        Admin: <span
+                                                            class="js-lists-values-admin">{{ curator.admin }}</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            <small class="text-muted text-uppercase js-lists-values-date">{{ curator.user.date_joined }}
+                                            </small>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

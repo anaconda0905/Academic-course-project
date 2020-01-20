@@ -1,0 +1,224 @@
+{% extends "aonebrains_main/base.html" %}
+
+{% block content %}
+    {% with course=opencourse %}
+        <!-- Breadcrumbs Start -->
+        <div class="rs-breadcrumbs bg7 breadcrumbs-overlay">
+            <div class="breadcrumbs-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1 class="page-title">{{ opencourse.title }}</h1>
+                            <ul>
+                                <li>
+                                    <a class="active" href="{% url "aonebrains_main:course_list" %}">Home</a>
+                                </li>
+                                <li>{{ opencourse.title }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Breadcrumbs End -->
+
+        <!-- Courses Details Start -->
+        <div class="rs-courses-details pt-100 pb-70">
+            <div class="container">
+                <div class="row mb-30">
+                    <div class="col-lg-8 col-md-12">
+                        <div class="detail-img">
+                            {% if opencourse.preview %}
+                                <img style="height: 22em;" src="{{ opencourse.preview.url }}" alt="Courses Images"/>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <ul class="course-meta-style">
+                                    <li class="author">
+                                        <div class="image">
+                                            {% if opencourse.creator.user.avatar %}
+                                                <img src="{{ opencourse.creator.user.avatar.url }}"
+                                                     style="margin: 3px; margin-right: 25px; height: 3em"
+                                                     alt="">
+                                            {% endif %}
+                                        </div>
+                                        <div class="author-name">
+                                            <a href="#">{{ opencourse.creator.user.get_full_name }}</a>
+                                            <p>Teacher</p>
+                                        </div>
+                                    </li>
+                                    <li class="categories" style="    padding-left: 69px">
+                                        <a href="#"
+                                           class="course-name">{{ opencourse.subject }}</a>
+                                        <p>Subject</p>
+                                    </li>
+                                    <li class="categories" style="padding-left: 62px">
+                                        <a href="#" class="course-name">{{ opencourse.grade }}</a>
+                                        <p>Class</p>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="btn-area">
+                                    {% if request.user.is_authenticated %}
+                                        <form action="." method="post">
+
+                                            {% csrf_token %}
+                                            <input type="hidden" name="course" id="id_course"
+                                                   value="{{ opencourse.id }}"/>
+                                            <input style="background: #ff3115;
+    color: #fff;
+    display: inline-block;
+    text-transform: uppercase;
+    padding: 10px 20px;" type="submit" value="Enroll This Course">
+                                            </input>
+                                        </form>
+                                    {% else %}
+                                        <a href="{% url "accounts:login" %}">
+                                            Register to enroll
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="course-des-tabs">
+                                    <div class="tab-btm">
+                                        <!-- Nav tabs -->
+                                        <div class="tabs-wrapper">
+                                            <ul class="nav classic-tabs tabs-cyan" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link waves-light active" data-toggle="tab"
+                                                       href="#panel51"
+                                                       role="tab">Description</a>
+                                                </li>
+                                                {#                                            <li class="nav-item">#}
+                                                {#                                                <a class="nav-link waves-light" data-toggle="tab" href="#curriculum"#}
+                                                {#                                                   role="tab">Curriculum</a>#}
+                                                {#                                            </li>#}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- Tab panels -->
+                                    <div class="tab-content card">
+                                        <!--Panel 1-->
+                                        <div class="tab-pane fade in active show" id="panel51" role="tabpanel">
+                                            <h4 class="desc-title">Course Details</h4>
+                                            <p>{{ opencourse.overview }}</p>
+
+                                        </div>
+                                    </div>
+                                    <!--/.Panel 2-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="sidebar-area">
+                            <div class="course-features-info">
+                                <h4 class="desc-title">Course Features</h4>
+                                <ul>
+                                    <li><i class="fa fa-files-o"></i> <span class="label">Lectures</span> <span
+                                            class="value">{{ course.total_contents }}</span></li>
+                                    <li><i class="fa fa-language"></i> <span class="label">Subject</span> <span
+                                            class="value">{{ course.subject }}</span></li>
+                                    <li><i class="fa fa-users"></i> <span class="label">Students</span> <span
+                                            class="value">{{ course.total_students }}</span>
+                                    </li>
+                                    {% if opencourse.quiz_set.count > 0 %}
+                                        <li><i class="fa fa-check-square-o"></i> <span class="label">Assessments</span>
+                                            <span
+                                                    class="value">Yes</span></li>
+                                    {% else %}
+                                        <li><i class="fa fa-check-square-o"></i> <span class="label">Assessments</span>
+                                            <span
+                                                    class="value">No</span></li>
+
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            <div class="latest-courses">
+                                <h3 class="title">Latest Courses</h3>
+                                {% for latest_course in latest_courses %}
+                                    <div class="post-item">
+                                        <div class="post-img">
+                                            <a href="{% url "aonebrains_main:course_detail" latest_course.slug %}">
+                                                {% if latest_course.preview %}
+                                                    <img style="height: 70px;width: 116px;"
+                                                         src="{{ latest_course.preview.url }}" alt=""
+                                                         title="{{ latest_course.title }}"></a>
+                                                {% endif %}
+                                        </div>
+                                        <div class="post-desc">
+                                            <h4>
+                                                <a href="{% url "aonebrains_main:course_detail" latest_course.slug %}">{{ latest_course.title }}</a>
+                                            </h4>
+                                            <span class="duration">
+	                                        {{ latest_course.subject }}
+	                                    </span>
+                                            <span class="price">{{ latest_course.grade }}</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container pt-45">
+                <!-- Testimonial Start -->
+                <div class="related-courses rs-courses-3">
+                    <div class="sec-title-2 mb-50">
+                        <h2>RELATED COURSES</h2>
+                        <p>Considering primary motivation for the generation of narratives is a useful concept</p>
+                    </div>
+                    <div class="rs-carousel owl-carousel" data-loop="true" data-items="3" data-margin="30"
+                         data-autoplay="true" data-autoplay-timeout="5000" data-smart-speed="1500" data-nav="true"
+                         data-nav-speed="false" data-mobile-device="1" data-mobile-device-nav="true"
+                         data-ipad-device="2"
+                         data-ipad-device-nav="true" data-md-device="3" data-md-device-nav="true">
+                        {% for related_class_course in related_class_courses %}
+                            <div class="course-item">
+                                <div class="course-img">
+                                    {% if related_class_course.preview %}
+                                        <img style="height: 280px; width: 350px"
+                                             src="{{ related_class_course.preview.url }}" alt=""/>
+                                    {% endif %}
+                                    <div class="course-toolbar">
+                                        <h4 class="course-category"><a href="#">{{ related_class_course.subject }}</a>
+                                        </h4>
+                                        <div class="course-date">
+                                            <i class="fa fa-calendar"></i> {{ related_class_course.year_month_created }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-body">
+                                    <div class="course-desc">
+                                        <h4 class="course-title"><a
+                                                href="{% url "aonebrains_main:course_detail" related_class_course.slug %}">{{ related_class_course.title }}</a>
+                                        </h4>
+                                        <p>
+                                            {{ related_class_course.overview|truncatechars_html:"40" }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="course-footer">
+                                    <div class="course-seats">
+                                        <i class="fa fa-users"></i> {{ related_class_course.total_students }} STUDENTS
+                                    </div>
+                                    <div class="course-button">
+                                        <a href="#">APPLY NOW</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Courses Details End -->
+    {% endwith %}
+{% endblock %}

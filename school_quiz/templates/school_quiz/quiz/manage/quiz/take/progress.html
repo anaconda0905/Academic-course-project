@@ -1,0 +1,79 @@
+{% extends "aonebrains_main/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load quiz_tags %}
+
+{% block title %} {% trans "Progress Page" %} {% endblock %}
+{% block description %} {% trans "User Progress Page" %} {% endblock %}
+
+{% block content %}
+
+
+    <div style="background-image: url({% static "main/images/quiz/progress.jpg" %}) !important;
+            background-size: cover; " class="rs-breadcrumbs bg7 breadcrumbs-overlay">
+        <div class="breadcrumbs-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1 class="page-title">{% trans "Previous exam papers" %}</h1>
+                        <ul>
+                            <li>
+                                <a class="active" href="{% url "aonebrains_main:course_list" %}">Home</a>
+                            </li>
+                            <li>My Progress</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumbs End -->
+    <div style="margin: 4em 1em 14em 1em;">
+        {% if exams %}
+
+            <hr>
+
+
+            <strong class="lead text-center" style="text-align: center">
+                {% trans "Below are the results of exams that you have sat." %}
+            </strong>
+
+            <hr>
+
+            <table class="table table-bordered table-striped">
+
+                <thead>
+                <tr>
+                    <th>{% trans "Quiz Title" %}</th>
+                    <th>{% trans "Score" %}</th>
+                    <th>{% trans "Possible Score" %}</th>
+                    <th>%</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                {% for exam in exams %}
+
+                    <tr>
+                        <td>{{ exam.quiz.title }}</td>
+                        <td>{{ exam.current_score }}</td>
+                        <td>{{ exam.get_max_score }}</td>
+                        <td>{{ exam.get_percent_correct }}</td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <hr>
+
+        {% else %}
+            <h2 class="text-center" style="text-align: center;
+    color: red;"> No Quiz Taken.</h2>
+        {% endif %}
+    </div>
+
+{% endblock %}

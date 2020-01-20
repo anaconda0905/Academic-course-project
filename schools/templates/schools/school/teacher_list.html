@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Teachers
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Teachers</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="table-responsive border-bottom" data-toggle="lists"
+                                 data-lists-values='["js-lists-values-employee-name"]'>
+                                {% if request.user.account_type != "admin" %}
+                                <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                        data-target="#exampleModalCenter">
+                                    Add Teacher
+                                </button>
+                                    <br>
+                                <br>
+                                {% endif %}
+                                <div class="search-form search-form--light mb-3">
+                                    <input type="text" class="form-control search" placeholder="Search">
+                                    <button class="btn" type="button" role="button"><i class="material-icons">search</i>
+                                    </button>
+                                </div>
+
+                                <table class="table mb-0" style="width: 100%">
+                                    <thead>
+                                    <tr>
+
+                                        <th>Teacher</th>
+                                        <th style="width: 51px;">Username</th>
+                                        <th style="width: 51px;">Email</th>
+                                        <th style="width: 51px;">Phone</th>
+                                        <th style="width: 100px;">Class</th>
+                                        <th style="width: 100px;">Joined</th>
+                                        {#                                        <th style="width: 40px;">Options</th>#}
+                                    </tr>
+                                    </thead>
+                                    <tbody class="list" id="search">
+                                    {% for teacher in teachers %}
+                                        <tr>
+                                            <td>
+                                                <a data-toggle="tooltip" title="Instructor Detail"
+                                                   href="{% url "schools:teachers:detail" teacher.id %}"
+                                                ><span class="js-lists-values-employee-name">{{ teacher.user.get_full_name }}</span></a>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ teacher.user.username }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ teacher.user.email }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ teacher.user.phone }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ teacher.user.teacher_profile.grade }}</small>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ teacher.user.date_joined }}</small>
+                                            </td>
+                                            {#                                            <td><a data-toggle="tooltip" title="Instructor Detail"#}
+                                            {#                                                   href="{% url "schools:teachers:detail" teacher.id %}"#}
+                                            {#                                            ><i class="fa fa-info-circle"></i></a></td>#}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <style>
+        [dir=ltr] .modal-backdrop {
+            position: unset !important;
+        }
+    </style>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="." novalidate method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="form-label" for="username">Username:</label>
+                            <div class="input-group input-group-merge">
+                                {{ form.username|add_class:"form-control form-control-prepended" }}
+                                {#                                <input id="email" type="email" required="" class="form-control form-control-prepended" placeholder="Your email address">#}
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="far fa-envelope"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password">First Name</label>
+                            <div class="input-group input-group-merge">
+                                {{ form.first_name|add_class:"form-control form-control-prepended" }}
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="far fa-key"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password2">Last Name</label>
+                            <div class="input-group input-group-merge">
+                                {{ form.last_name|add_class:"form-control form-control-prepended" }}
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="far fa-key"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password2">Email</label>
+                            <div class="input-group input-group-merge">
+                                {{ form.email|add_class:"form-control form-control-prepended" }}
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <span class="far fa-key"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if class_form %}
+                            <div class="form-group">
+                                <label class="form-label" for="grade">Class:</label>
+                                <div class="input-group input-group-merge">
+                                    {{ class_form.grade|add_class:"form-control form-control-prepended fontsize" }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

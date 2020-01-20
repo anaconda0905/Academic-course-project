@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load course %}
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="mdk-drawer-layout__content page ">
+
+        <div class="container-fluid page__container">
+
+            <h1 class="h2">Title: {{ object.item }}</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="table mb-0 col-md-12">
+                        {% with item=object.item %}
+                            <tbody>
+                            <tr>
+                                <th scope="row">Title:</th>
+                                <td>{{ item }}</td>
+                            </tr>
+                            {% if item|model_name == 'atext' %}
+                                <tr>
+                                    <th scope="row">Content:</th>
+                                    <td>{{ item.content }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Video:</th>
+                                    <td>
+                                        <video width="400" controls>
+                                            <source src="{{ item.video.url }}" type="video/mp4">
+                                        </video>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">File:</th>
+                                    <td>
+                                        <a href="{{ item.file.url }}">Download</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Image:</th>
+                                    <td>
+                                        {% if item.image %}
+                                            <img style="width: 100px;" src="{{ item.image.url }}">
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% elif item|model_name == 'afile' %}
+                                <tr>
+                                    <th scope="row">File:</th>
+                                    <td>{{ item.file }}</td>
+                                </tr>
+                            {% elif item|model_name == 'aimage' %}
+                                <tr>
+                                    <th scope="row">Image:</th>
+                                    <td>{{ item.image }}</td>
+                                </tr>
+                            {% elif item|model_name == 'avideo' %}
+                                <tr>
+                                    <th scope="row">Video:</th>
+                                    <td>{{ item.video }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endwith %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

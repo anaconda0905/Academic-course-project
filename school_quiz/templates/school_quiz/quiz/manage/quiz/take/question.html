@@ -1,0 +1,121 @@
+{% extends "aonebrains_main/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load quiz_tags %}
+
+{% block title %} {{ quiz.title }} {% endblock %}
+
+
+{% block content %}
+
+    <div style="background-image: url({% static "main/images/quiz/question_mark.jpg" %}) !important;
+            background-size: contain; " class="rs-breadcrumbs bg7 breadcrumbs-overlay">
+        <div class="breadcrumbs-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1 class="page-title">{{ quiz.title }}</h1>
+                        <ul>
+                            <li>
+                                <a class="active" href="{% url "aonebrains_main:course_list" %}">Home</a>
+                            </li>
+                            <li>{{ quiz.title }}</li>
+                            <br>
+                            <br>
+                            <li>
+                                {% if progress %}
+                                    {% trans "Question" %} {{ progress.0|add:1 }} {% trans "of" %} {{ progress.1 }}
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumbs End -->
+
+    {#    {% if previous.answers %}#}
+    {##}
+    {#        {% if previous.previous_outcome %}#}
+    {#            <div class="alert alert-success">#}
+    {#        {% else %}#}
+    {#            <div class="alert alert-warning">#}
+    {#        {% endif %}#}
+    {#    <p>#}
+    {#        <small>#}
+    {#            {% trans "Your answer was" %} </small>#}
+    {#        <strong>#}
+    {#            {{ previous.previous_outcome|yesno:"correct,incorrect" }}#}
+    {#        </strong>#}
+    {#    </p>#}
+    {##}
+    {#    </div>#}
+    {##}
+    {#        {% include 'aonebrains_quiz/quiz/manage/quiz/take/correct_answer.html' %}#}
+    {##}
+    {#        <p><strong>{% trans "Explanation" %}:</strong></p>#}
+    {#        <div class="well " style="background-color: #fcf8e3;">#}
+    {#            <p>{{ previous.previous_question.explanation }}</p>#}
+    {#        </div>#}
+    {##}
+    {#        <hr>#}
+    {##}
+    {#    {% endif %}#}
+
+    <br/>
+
+    {% if question %}
+        {##}
+        {#        {% if progress %}#}
+        {#            <div style="float: right;">#}
+        {#                {% trans "Question" %} {{ progress.0|add:1 }} {% trans "of" %} {{ progress.1 }}#}
+        {#            </div>#}
+        {#        {% endif %}#}
+        {##}
+        {#        <p>#}
+        {#            <small class="muted">{% trans "Question Course" %}:</small>#}
+        {#            <strong>{{ question.course }}</strong>#}
+        {#        </p>#}
+
+        {#        <p class="lead">{{ question.content }}</p>#}
+
+        {% if question.figure %}
+            <img style="border: solid;
+                        border-color: lightgray;
+                        width: 29em;
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                        margin-top: 17px"
+                 src="{{ question.figure.url }}" alt="{{ question.content }}"/>
+        {% endif %}
+
+        <p style="border-left: 6px solid #5d5050;
+    background-color: #d3d3d33d;
+    margin-left: 190px;
+    margin-right: 200px;">{{ question.content }}</p>
+
+        <form action="" method="POST">{% csrf_token %}
+            <input type=hidden name="question_id" value="{{ question.id }}">
+
+            <ul class="list-group">
+
+                {% for answer in form.answers %}
+                    <li class="list-group-item">
+                        {{ answer }}
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+            <input type="submit" value="{% trans "Check" %}" class="btn btn-large btn-block btn-primary"/>
+        </form>
+
+    {% endif %}
+
+    <hr>
+    </div>
+
+
+{% endblock %}
