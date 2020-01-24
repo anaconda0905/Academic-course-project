@@ -13,7 +13,7 @@ django-reverse-admin==2.3.0
 django-reversion==3.0.4
 django-simple-history==2.7.3
 django-suit==0.2.26
-django-user-sessions==1.6.0
+django-user-sessions==1.7.1
 django-widget-tweaks==1.4.5
 dnspython==1.16.0
 et-xmlfile==1.0.1
